@@ -12,12 +12,22 @@ adopt-info: logisim-evolution-snapcraft
 architectures:
   - build-on: amd64
 
+layout:
+  # Gtk-Message: Failed to load module "canberra-gtk-module"
+  /usr/lib/$SNAPCRAFT_ARCH_TRIPLET/gtk-2.0/modules:
+    symlink: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/gtk-2.0/modules
+  /usr/lib/$SNAPCRAFT_ARCH_TRIPLET/gtk-3.0/modules:
+    symlink: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/gtk-3.0/modules
+
 apps:
   logisim-evolution-snapcraft:
     extensions: [gnome-3-28]
     command: usr/lib/jvm/java-16-openjdk-amd64/bin/java -jar $SNAP/logisim/logisim-evolution.jar
     environment:
       _JAVA_OPTIONS: "-Duser.home=$SNAP_USER_DATA"
+      XDG_DATA_HOME: $SNAP/usr/share
+      FONTCONFIG_PATH: $SNAP/etc/fonts/conf.d
+      FONTCONFIG_FILE: $SNAP/etc/fonts/fonts.conf
     plugs:
       - gsettings
       - opengl
@@ -38,6 +48,7 @@ parts:
     gradle-options: [shadowJar]
     override-pull: |
       snapcraftctl pull
+      git checkout "$(git describe --tags)" -b latest
       snapcraftctl set-version "$(git describe --tags | sed 's/v//' | sed "s/-g/%/"  | cut -d "%" -f1)"
     override-build: |
       snapcraftctl build
@@ -57,6 +68,8 @@ parts:
     stage-packages:
       - openjdk-16-jre
       - openjdk-16-jdk
+      - libcanberra-gtk-module
+      - libcanberra-gtk3-module
 
 package-repositories:
  - type: apt
