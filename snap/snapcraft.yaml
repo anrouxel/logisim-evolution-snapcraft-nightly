@@ -1,0 +1,63 @@
+name: logisim-evolution-snapcraft
+license: GPL-3.0
+summary: Logisim is a digital circuit simulator
+description: |
+  Github (compilation) : https://github.com/anrouxel/logisim-evolution-snapcraft
+base: core18
+grade: stable
+confinement: strict
+
+adopt-info: logisim-evolution-snapcraft
+
+architectures:
+  - build-on: amd64
+
+apps:
+  logisim-evolution-snapcraft:
+    extensions: [gnome-3-28]
+    command: usr/lib/jvm/java-16-openjdk-amd64/bin/java -jar $SNAP/logisim/logisim-evolution.jar
+    environment:
+      _JAVA_OPTIONS: "-Duser.home=$SNAP_USER_DATA"
+    plugs:
+      - gsettings
+      - opengl
+      - home
+      - desktop
+      - desktop-legacy
+      - wayland
+      - x11
+      - unity7
+      - network
+
+parts:     
+  logisim-evolution-snapcraft:
+    plugin: gradle
+    source: https://github.com/logisim-evolution/logisim-evolution.git
+    source-type: git
+    gradle-output-dir: "build/libs"
+    gradle-options: [shadowJar]
+    override-pull: |
+      snapcraftctl pull
+      snapcraftctl set-version "$(git describe --tags | sed 's/v//' | sed "s/-g/%/"  | cut -d "%" -f1)"
+    override-build: |
+      snapcraftctl build
+      cd build/libs
+      mv *-all.jar logisim-evolution.jar
+      mv logisim-evolution.jar $SNAPCRAFT_PART_INSTALL/
+      cd $SNAPCRAFT_PART_INSTALL/
+      mkdir logisim
+      mv logisim-evolution.jar $SNAPCRAFT_PART_INSTALL/logisim
+      cd $SNAPCRAFT_PART_INSTALL/
+      update-java-alternatives --set /usr/lib/jvm/java-1.16.0-openjdk-amd64
+    build-packages:
+      - git
+      - sed
+      - openjdk-16-jre
+      - openjdk-16-jdk
+    stage-packages:
+      - openjdk-16-jre
+      - openjdk-16-jdk
+
+package-repositories:
+ - type: apt
+   ppa: openjdk-r/ppa
