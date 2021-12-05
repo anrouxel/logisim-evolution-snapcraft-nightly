@@ -48,7 +48,7 @@ parts:
     gradle-options: [shadowJar]
     override-pull: |
       snapcraftctl pull
-      git checkout "$(git describe --tags)" -b latest
+      git checkout "$(git describe --tags `git rev-list --tags --max-count=1`)" -b latest
       snapcraftctl set-version "$(git describe --tags | sed 's/v//' | sed "s/-g/%/"  | cut -d "%" -f1)"
     override-build: |
       snapcraftctl build
