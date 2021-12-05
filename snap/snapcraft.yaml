@@ -70,6 +70,7 @@ parts:
       - openjdk-16-jdk
       - libcanberra-gtk-module
       - libcanberra-gtk3-module
+      - fontconfig
 
 package-repositories:
  - type: apt
