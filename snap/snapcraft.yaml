@@ -18,6 +18,12 @@ layout:
     symlink: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/gtk-2.0/modules
   /usr/lib/$SNAPCRAFT_ARCH_TRIPLET/gtk-3.0/modules:
     symlink: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/gtk-3.0/modules
+  /etc/fonts:
+    bind: $SNAP/etc/fonts
+  /usr/share/fonts:
+    bind: $SNAP/usr/share/fonts
+  /var/cache/fontconfig:
+    bind: $SNAP_DATA/var/cache/fontconfig
 
 apps:
   logisim-evolution-snapcraft:
@@ -65,12 +71,15 @@ parts:
       - sed
       - openjdk-16-jre
       - openjdk-16-jdk
+      - libfontconfig1-dev
     stage-packages:
       - openjdk-16-jre
       - openjdk-16-jdk
       - libcanberra-gtk-module
       - libcanberra-gtk3-module
-      - fontconfig
+      - fonts-freefont-ttf
+      - fonts-arphic-uming
+      - fontconfig-config
 
 package-repositories:
  - type: apt
