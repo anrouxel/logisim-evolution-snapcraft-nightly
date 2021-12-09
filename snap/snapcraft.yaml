@@ -1,4 +1,5 @@
 name: logisim-evolution-snapcraft
+icon: snap/gui/logisim-icon-128.png
 license: GPL-3.0
 summary: Logisim is a digital circuit simulator
 description: |
