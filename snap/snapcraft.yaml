@@ -13,9 +13,6 @@ architectures:
   - build-on: amd64
 
 layout:
-  # Gtk-Message: Failed to load module "canberra-gtk-module"
-  /usr/lib/$SNAPCRAFT_ARCH_TRIPLET/gtk-2.0/modules:
-    symlink: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/gtk-2.0/modules
   /etc/fonts:
     bind: $SNAP/etc/fonts
   /usr/share/fonts:
@@ -71,8 +68,6 @@ parts:
       - libfontconfig1-dev
     stage-packages:
       - openjdk-16-jre
-      - libgtk2.0-0
-      - libcanberra-gtk-module
       - fonts-freefont-ttf
       - fonts-arphic-uming
       - fontconfig-config
