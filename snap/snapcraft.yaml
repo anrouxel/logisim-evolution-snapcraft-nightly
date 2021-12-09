@@ -65,7 +65,6 @@ parts:
       mkdir logisim
       mv logisim-evolution.jar $SNAPCRAFT_PART_INSTALL/logisim
       cd $SNAPCRAFT_PART_INSTALL/
-      update-java-alternatives --set /usr/lib/jvm/java-1.16.0-openjdk-amd64
     build-packages:
       - git
       - sed
@@ -74,7 +73,8 @@ parts:
       - libfontconfig1-dev
     stage-packages:
       - openjdk-16-jre
-      - openjdk-16-jdk
+      - libgtk-3-0
+      - libgtk2.0-0
       - libcanberra-gtk-module
       - libcanberra-gtk3-module
       - fonts-freefont-ttf
