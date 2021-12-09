@@ -5,5 +5,5 @@ Terminal=false
 Exec=logisim-evolution-snapcraft
 Icon=${SNAP}/meta/gui/logisim-icon-128.png
 Categories=Science;Education;
-Name=Logisim Evolution
-Comment=Logisim Evolution ${SNAPCRAFT_PROJECT_VERSION}
+Name=Logisim evolution
+Comment=Logisim evolution ${SNAPCRAFT_PROJECT_VERSION}
