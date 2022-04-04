@@ -23,7 +23,7 @@ layout:
 
 apps:
   logisim-evolution-snapcraft:
-    extensions: [gnome-3-28]
+    extensions: [gnome-3-38]
     command: usr/lib/jvm/java-16-openjdk-amd64/bin/java -jar $SNAP/logisim/logisim-evolution.jar
     environment:
       _JAVA_OPTIONS: "-Duser.home=$SNAP_USER_DATA"
