@@ -90,7 +90,6 @@ parts:
     build-packages:
       - git
       - sed
-      - openjdk-16-jre
       - openjdk-16-jdk
       - libfontconfig1-dev
     stage-packages:
@@ -98,7 +97,3 @@ parts:
       - fonts-freefont-ttf
       - fonts-arphic-uming
       - fontconfig-config
-
-package-repositories:
- - type: apt
-   ppa: openjdk-r/ppa
