@@ -4,7 +4,7 @@ license: GPL-3.0
 summary: Logisim is a digital circuit simulator
 description: |
   Github (compilation) : https://github.com/anrouxel/logisim-evolution-snapcraft
-base: core18
+base: core20
 grade: stable
 confinement: strict
 
@@ -43,17 +43,43 @@ apps:
 
 parts:     
   logisim-evolution-snapcraft:
-    plugin: gradle
+    plugin: nil
     source: https://github.com/logisim-evolution/logisim-evolution.git
     source-type: git
-    gradle-output-dir: "build/libs"
-    gradle-options: [shadowJar]
     override-pull: |
       snapcraftctl pull
       git checkout "$(git describe --tags `git rev-list --tags --max-count=1`)" -b latest
       snapcraftctl set-version "$(git describe --tags | sed 's/v//' | sed "s/-g/%/"  | cut -d "%" -f1)"
     override-build: |
-      snapcraftctl build
+      # Gets the host and port from a proxy URL
+      #   $1 = the proxy URL, such as "http://10.10.10.1:8222/"
+      getproxy () {
+          # Parses URL with Bash or Dash shell parameter expansion
+          tail=${1#http*://}
+          head=${tail%%/*}
+          host=${head%:*}
+          port=${head##*:}
+      }
+      # Applies patches for building on armhf, i386, ppc64el, and s390x
+      case $SNAPCRAFT_TARGET_ARCH in
+          armhf|i386|ppc64el|s390x)
+              for p in "$SNAPCRAFT_PROJECT_DIR"/snap/local/*.patch; do
+                  git apply "$p"
+              done
+              ;;
+      esac
+      # Adds Java system properties using shell positional parameters
+      set --
+      if [ -n "${http_proxy:-}" ]; then
+          getproxy "$http_proxy"
+          set -- "$@" "-Dhttp.proxyHost=$host" "-Dhttp.proxyPort=$port"
+      fi
+      if [ -n "${https_proxy:-}" ]; then
+          getproxy "$https_proxy"
+          set -- "$@" "-Dhttps.proxyHost=$host" "-Dhttps.proxyPort=$port"
+      fi
+      # Builds JavaFX
+      bash gradlew "$@" shadowJar
       cd build/libs
       mv *-all.jar logisim-evolution.jar
       mv logisim-evolution.jar $SNAPCRAFT_PART_INSTALL/
