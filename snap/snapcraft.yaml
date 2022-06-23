@@ -72,6 +72,7 @@ parts:
       fi
       bash gradlew "$@" shadowJar && \
       mkdir $SNAPCRAFT_PART_INSTALL/logisim && \
+      cd build/libs && \
       mv *-all.jar logisim-evolution.jar && \
       mv logisim-evolution.jar $SNAPCRAFT_PART_INSTALL/logisim
     build-packages:
