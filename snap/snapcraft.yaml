@@ -70,9 +70,8 @@ parts:
           getproxy "$https_proxy"
           set -- "$@" "-Dhttps.proxyHost=$host" "-Dhttps.proxyPort=$port"
       fi
-      # Builds JavaFX
-      ./gradlew "$@" shadowJar
-      cd build/libs
+      bash gradlew "$@" shadowJar
+      cd build || exit
       mv *-all.jar logisim-evolution.jar
       mv logisim-evolution.jar $SNAPCRAFT_PART_INSTALL/
       cd $SNAPCRAFT_PART_INSTALL/
