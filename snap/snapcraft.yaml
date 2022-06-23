@@ -71,7 +71,7 @@ parts:
           set -- "$@" "-Dhttps.proxyHost=$host" "-Dhttps.proxyPort=$port"
       fi
       # Builds JavaFX
-      bash gradlew "$@" shadowJar
+      ./gradlew "$@" shadowJar
       cd build/libs
       mv *-all.jar logisim-evolution.jar
       mv logisim-evolution.jar $SNAPCRAFT_PART_INSTALL/
