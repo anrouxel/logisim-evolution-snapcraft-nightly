@@ -70,21 +70,15 @@ parts:
           getproxy "$https_proxy"
           set -- "$@" "-Dhttps.proxyHost=$host" "-Dhttps.proxyPort=$port"
       fi
-      bash gradlew "$@" shadowJar
-      cd build || exit
-      mv *-all.jar logisim-evolution.jar
-      mv logisim-evolution.jar $SNAPCRAFT_PART_INSTALL/
-      cd $SNAPCRAFT_PART_INSTALL/
-      mkdir logisim
+      bash gradlew "$@" shadowJar && \
+      mkdir $SNAPCRAFT_PART_INSTALL/logisim && \
+      mv *-all.jar logisim-evolution.jar && \
       mv logisim-evolution.jar $SNAPCRAFT_PART_INSTALL/logisim
-      cd $SNAPCRAFT_PART_INSTALL/
-      tree $SNAPCRAFT_PART_INSTALL/
     build-packages:
       - git
       - sed
       - openjdk-16-jdk
       - libfontconfig1-dev
-      - tree
     stage-packages:
       - openjdk-16-jre
       - fonts-freefont-ttf
