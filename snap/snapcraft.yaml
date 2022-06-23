@@ -79,11 +79,13 @@ parts:
       mkdir logisim
       mv logisim-evolution.jar $SNAPCRAFT_PART_INSTALL/logisim
       cd $SNAPCRAFT_PART_INSTALL/
+      tree $SNAPCRAFT_PART_INSTALL/
     build-packages:
       - git
       - sed
       - openjdk-16-jdk
       - libfontconfig1-dev
+      - tree
     stage-packages:
       - openjdk-16-jre
       - fonts-freefont-ttf
