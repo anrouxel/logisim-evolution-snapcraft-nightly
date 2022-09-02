@@ -4,7 +4,7 @@ license: GPL-3.0
 summary: Logisim is a digital circuit simulator
 description: |
   Github (compilation) : https://github.com/anrouxel/logisim-evolution-snapcraft
-base: core20
+base: core22
 grade: stable
 confinement: strict
 
@@ -12,6 +12,7 @@ adopt-info: logisim-evolution-snapcraft
 
 architectures:
   - build-on: amd64
+    build-for: amd64
 
 layout:
   /etc/fonts:
@@ -23,8 +24,8 @@ layout:
 
 apps:
   logisim-evolution-snapcraft:
-    extensions: [gnome-3-38]
-    command: usr/lib/jvm/java-16-openjdk-amd64/bin/java -jar $SNAP/logisim/logisim-evolution.jar
+    extensions: [gnome]
+    command: usr/lib/jvm/java-17-openjdk-$CRAFT_TARGET_ARCH/bin/java -jar $SNAP/logisim/logisim-evolution.jar
     environment:
       _JAVA_OPTIONS: "-Duser.home=$SNAP_USER_DATA"
       XDG_DATA_HOME: $SNAP/usr/share
@@ -47,9 +48,9 @@ parts:
     source: https://github.com/logisim-evolution/logisim-evolution.git
     source-type: git
     override-pull: |
-      snapcraftctl pull
+      craftctl default
       git checkout "$(git describe --tags `git rev-list --tags --max-count=1`)" -b latest
-      snapcraftctl set-version "$(git describe --tags | sed 's/v//' | sed "s/-g/%/"  | cut -d "%" -f1)"
+      craftctl set version="$(git describe --tags | sed 's/v//' | sed "s/-g/%/"  | cut -d "%" -f1)"
     override-build: |
       # Gets the host and port from a proxy URL
       #   $1 = the proxy URL, such as "http://10.10.10.1:8222/"
@@ -71,17 +72,17 @@ parts:
           set -- "$@" "-Dhttps.proxyHost=$host" "-Dhttps.proxyPort=$port"
       fi
       bash gradlew "$@" shadowJar && \
-      mkdir $SNAPCRAFT_PART_INSTALL/logisim && \
+      mkdir $CRAFT_PART_INSTALL/logisim && \
       cd build/libs && \
       mv *-all.jar logisim-evolution.jar && \
-      mv logisim-evolution.jar $SNAPCRAFT_PART_INSTALL/logisim
+      mv logisim-evolution.jar $CRAFT_PART_INSTALL/logisim
     build-packages:
       - git
       - sed
-      - openjdk-16-jdk
+      - openjdk-17-jdk
       - libfontconfig1-dev
     stage-packages:
-      - openjdk-16-jre
+      - openjdk-17-jre
       - fonts-freefont-ttf
       - fonts-arphic-uming
       - fontconfig-config
