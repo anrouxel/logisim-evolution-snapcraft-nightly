@@ -10,8 +10,10 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - uses: snapcore/action-build@v1
-      id: snapcraft
-    - uses: actions/upload-artifact@v2
+      id: build
+    - uses: snapcore/action-publish@v1
+      env:
+        SNAPCRAFT_STORE_CREDENTIALS: ${{ secrets.STORE_LOGIN }}
       with:
-        name: snap
-        path: ${{ steps.snapcraft.outputs.snap }}
+        snap: ${{ steps.build.outputs.snap }}
+        release: edge
