@@ -49,8 +49,8 @@ parts:
     source-type: git
     override-pull: |
       craftctl default
-      git checkout "$(git describe --tags `git rev-list --tags --max-count=1`)" -b latest
-      craftctl set version="$(git describe --tags | sed 's/v//' | sed "s/-g/%/"  | cut -d "%" -f1)"
+      git checkout develop
+      craftctl set version="$(date +%Y%m%d)"
     override-build: |
       # Gets the host and port from a proxy URL
       #   $1 = the proxy URL, such as "http://10.10.10.1:8222/"
